@@ -4,6 +4,17 @@
 
 This document describes the implementation of the **Walkover** match outcome feature for the Khel Club tournament management system. The walkover feature allows referees to record matches where one team is unable to compete, ensuring proper tournament progression and accurate record-keeping.
 
+## Demo Video
+
+📹 **Screen Recording**: [View Walkover Feature Demo](https://drive.google.com/file/d/1ph6_h-mEjidTMBXtyZVyD1Wp5jnR_Rda/view?usp=sharing)
+
+The demo video shows the walkover feature working end-to-end, including:
+
+- Navigating to the referee portal
+- Marking a match as walkover
+- Viewing walkover badges in all UI components
+- Walkover details display in match overlays
+
 ---
 
 ## How the Current Scoring Mechanism Works
