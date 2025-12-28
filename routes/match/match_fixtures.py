@@ -10,7 +10,7 @@ from sqlalchemy import cast
 def get_match_fixtures():
     tournament_id = request.args.get('tournament_id')
     pool = request.args.get('pool')
-    
+
     if not tournament_id:
         return jsonify({'error': 'tournament_id is required'}), 400
 
@@ -18,7 +18,7 @@ def get_match_fixtures():
         # Create aliases for Team table
         Team1 = aliased(Team)
         Team2 = aliased(Team)
-        
+
         # Create aliases for predecessor matches
         PredMatch1 = aliased(Match)
         PredMatch2 = aliased(Match)
@@ -49,7 +49,7 @@ def get_match_fixtures():
         ).outerjoin(
             Team2, Match.team2_id == Team2.team_id
         ).outerjoin(
-            Round, (cast(Match.round_id, db.Integer) == Round.round_id) & 
+            Round, (cast(Match.round_id, db.Integer) == Round.round_id) &
                   (Match.tournament_id == Round.tournament_id)
         ).outerjoin(
             PredMatch1, Match.predecessor_1 == PredMatch1.id
@@ -68,10 +68,10 @@ def get_match_fixtures():
 
         # Execute the query
         matches_data = base_query.all()
-        
+
         # Create a set to track processed match IDs
         processed_match_ids = set()
-        
+
         if not matches_data:
             return jsonify({'error': 'No matches found'}), 404
 
@@ -119,12 +119,12 @@ def get_match_fixtures():
         for match_data in matches_data:
             match = match_data[0]  # Get the Match object
             match_id = match.id  # Keep as integer
-            
+
             # Skip if we've already processed this match
             if match_id in processed_match_ids:
                 continue
             processed_match_ids.add(match_id)
-            
+
             # Get scores from lookup
             team1_score = score_lookup.get(match_id, {}).get(match.team1_id, 0)
             team2_score = score_lookup.get(match_id, {}).get(match.team2_id, 0)
@@ -171,6 +171,9 @@ def get_match_fixtures():
                     'is_final': match.is_final,
                     'status': match.status
                 },
+                'result_type': match.result_type,
+                'walkover_reason': match.walkover_reason,
+                'winner_source': match.winner_source,
                 'bracket_info': {
                     'round_number': match.round_number,
                     'bracket_position': match.bracket_position,
@@ -216,7 +219,7 @@ def get_match_fixtures_csv():
     try:
         # If round_id is provided, filter by round_id, otherwise return all rounds for the tournament
         match_query = Match.query.filter_by(tournament_id=tournament_id)
-        
+
         if round_id:
             if not round_id.isdigit():
                 return jsonify({'error': 'Round ID must be a number'}), 400
@@ -231,7 +234,7 @@ def get_match_fixtures_csv():
         # Use an in-memory stream for CSV data
         output = io.StringIO()
         writer = csv.writer(output)
-        
+
         # Write CSV header
         writer.writerow(['Round ID', 'Pool', 'Match ID', 'Match Name', 'Team 1 ID', 'Team 1 Players', 'Team 2 ID', 'Team 2 Players', 'Result'])
 
@@ -239,7 +242,7 @@ def get_match_fixtures_csv():
             # Get teams
             team1 = Team.query.get(match.team1_id)
             team2 = Team.query.get(match.team2_id)
-            
+
             # Format player names for team1
             team1_players = []
             if team1:
@@ -252,7 +255,7 @@ def get_match_fixtures_csv():
                     if player2:
                         team1_players.append(f"{player2.first_name} {player2.last_name}".strip())
             team1_players_str = ', '.join(team1_players) if team1_players else 'N/A'
-            
+
             # Format player names for team2
             team2_players = []
             if team2:
@@ -295,4 +298,4 @@ def get_match_fixtures_csv():
         )
 
     except Exception as e:
-        return jsonify({'error': str(e)}), 500 
+        return jsonify({'error': str(e)}), 500

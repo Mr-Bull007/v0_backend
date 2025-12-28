@@ -18,10 +18,10 @@ SET @MYSQLDUMP_TEMP_LOG_BIN = @@SESSION.SQL_LOG_BIN;
 SET @@SESSION.SQL_LOG_BIN= 0;
 
 --
--- GTID state at the beginning of the backup 
+-- GTID state at the beginning of the backup
 --
 
-SET @@GLOBAL.GTID_PURGED=/*!80000 '+'*/ '138a9b2d-de60-11f0-8506-92700261a531:1-193';
+-- SET @@GLOBAL.GTID_PURGED=/*!80000 '+'*/ '138a9b2d-de60-11f0-8506-92700261a531:1-193';
 
 --
 -- Table structure for table `match`
@@ -48,6 +48,9 @@ CREATE TABLE `match` (
   `successor` int DEFAULT NULL,
   `bracket_position` int DEFAULT NULL,
   `round_number` int DEFAULT NULL,
+  `result_type` varchar(20) DEFAULT NULL,
+  `walkover_reason` varchar(30) DEFAULT NULL,
+  `winner_source` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `team1_id` (`team1_id`),
   KEY `team2_id` (`team2_id`),
@@ -70,7 +73,7 @@ CREATE TABLE `match` (
 
 LOCK TABLES `match` WRITE;
 /*!40000 ALTER TABLE `match` DISABLE KEYS */;
-INSERT INTO `match` VALUES (7,'Round 1 Pool A - Thunder Smash vs Lightning Serve','T001','T002','1','A',NULL,0,1,NULL,NULL,'pending',NULL,NULL,NULL,NULL,NULL),(8,'Round 1 Pool A - Thunder Smash vs Smashers','T001','T003','1','A',NULL,0,1,NULL,NULL,'pending',NULL,NULL,NULL,NULL,NULL),(9,'Round 1 Pool A - Thunder Smash vs Destroyers','T001','T004','1','A',NULL,0,1,NULL,NULL,'pending',NULL,NULL,NULL,NULL,NULL),(10,'Round 1 Pool A - Lightning Serve vs Smashers','T002','T003','1','A',NULL,0,1,NULL,NULL,'pending',NULL,NULL,NULL,NULL,NULL),(11,'Round 1 Pool A - Lightning Serve vs Destroyers','T002','T004','1','A',NULL,0,1,NULL,NULL,'pending',NULL,NULL,NULL,NULL,NULL),(12,'Round 1 Pool A - Smashers vs Destroyers','T003','T004','1','A',NULL,0,1,NULL,NULL,'pending',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `match` VALUES (7,'Round 1 Pool A - Thunder Smash vs Lightning Serve','T001','T002','1','A',NULL,0,1,NULL,NULL,'pending',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(8,'Round 1 Pool A - Thunder Smash vs Smashers','T001','T003','1','A',NULL,0,1,NULL,NULL,'pending',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(9,'Round 1 Pool A - Thunder Smash vs Destroyers','T001','T004','1','A',NULL,0,1,NULL,NULL,'pending',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(10,'Round 1 Pool A - Lightning Serve vs Smashers','T002','T003','1','A',NULL,0,1,NULL,NULL,'pending',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(11,'Round 1 Pool A - Lightning Serve vs Destroyers','T002','T004','1','A',NULL,0,1,NULL,NULL,'pending',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(12,'Round 1 Pool A - Smashers vs Destroyers','T003','T004','1','A',NULL,0,1,NULL,NULL,'pending',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `match` ENABLE KEYS */;
 UNLOCK TABLES;
 

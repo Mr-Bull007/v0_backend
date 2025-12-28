@@ -15,7 +15,7 @@ class SkillType(str, Enum):
 
 class SuperTournament(db.Model):
     __tablename__ = 'super_tournament'
-    
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text)
@@ -24,7 +24,7 @@ class SuperTournament(db.Model):
 
 class Season(db.Model):
     __tablename__ = 'season'
-    
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     super_tournament_id = db.Column(db.Integer, db.ForeignKey('super_tournament.id'), nullable=False)
@@ -69,10 +69,10 @@ class Player(db.Model):
     super_tournament_id = db.Column(db.Integer, db.ForeignKey('super_tournament.id'), nullable=False)
     checked_in = db.Column(db.Boolean, default=False)
     # Add relationships for teams where player is player1 or player2
-    teams_as_player1 = db.relationship('Team', 
+    teams_as_player1 = db.relationship('Team',
                                      foreign_keys=[Team.player1_uuid],
                                      backref=db.backref('player1_rel', lazy=True))
-    teams_as_player2 = db.relationship('Team', 
+    teams_as_player2 = db.relationship('Team',
                                      foreign_keys=[Team.player2_uuid],
                                      backref=db.backref('player2_rel', lazy=True))
     # Add relationship to super tournament
@@ -96,6 +96,10 @@ class Match(db.Model):
     successor = db.Column(db.Integer, db.ForeignKey('match.id'), nullable=True)
     bracket_position = db.Column(db.Integer, nullable=True)
     round_number = db.Column(db.Integer, nullable=True)
+    # Match result columns
+    result_type = db.Column(db.String(20), nullable=True) # normal, walkover, etc
+    walkover_reason = db.Column(db.String(30), nullable=True) # reason for walkover, eg. team_1 absent, team_2 absent, etc
+    winner_source = db.Column(db.String(20), nullable=True) # winner source, eg. score, walkover, admin, etc
 
 class Score(db.Model):
     id = db.Column(db.Integer, primary_key=True)
